@@ -1,6 +1,7 @@
 import pygame as pg
 
-# Test
+from point import *
+
 pg.init()
 screen_width = 800
 screen_height = 600
@@ -14,6 +15,8 @@ x_pos = 375
 y_pos = 275
 movement_speed = 4
 clock = pg.time.Clock()
+
+PointsList = []
 
 # Game loop
 while not finished:
@@ -30,6 +33,12 @@ while not finished:
                 speed_delta += 1
             if event.key == pg.K_KP_MINUS:
                 speed_delta -= 1
+
+    # Generate points
+    if random.randint(1, 50) == 42:
+        new_point = Point(random.randint(50, screen_width-50), random.randint(50, screen_height-50))
+        PointsList.append(new_point)
+        print("Generated point, currently there are {} points.".format(len(PointsList)))
 
     # Update speed
     if speed_delta != 0:
@@ -61,6 +70,8 @@ while not finished:
     screen.fill((0, 0, 0))
     square_color = teal_color if square_is_teal else red_color
     pg.draw.rect(screen, square_color, pg.Rect(x_pos, y_pos, 50, 50))
+    for point in PointsList:
+        pg.draw.rect(screen, point.get_color(), pg.Rect(point.x_pos, point.y_pos, point.size, point.size))
 
     # Swap display buffers (there are two)
     pg.display.flip()
